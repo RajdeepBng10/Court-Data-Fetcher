@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Status Result - Delhi High Court Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="container">
+            <h1 class="header-title">
+                <i class="fas fa-gavel me-3"></i>Case Status Result
+            </h1>
+            <p class="header-subtitle">Delhi High Court Case Information</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container main-container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="card result-card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            {% if result %}
+                                <i class="fas fa-check-circle me-2"></i>Case Found
+                            {% else %}
+                                <i class="fas fa-exclamation-triangle me-2"></i>Search Result
+                            {% endif %}
+                        </h2>
+                        <div class="status-badge {{ 'status-success' if result else 'status-error' }}">
+                            <i class="fas {{ 'fa-check' if result else 'fa-times' }}"></i>
+                            {{ 'Success' if result else 'Error' }}
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        {% if result %}
+                            <!-- Success State - Display Case Details -->
+                            <div class="result-grid">
+                                <!-- Parties Information -->
+                                <div class="result-item">
+                                    <div class="result-label">
+                                        <div class="result-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        Parties Involved
+                                    </div>
+                                    <div class="result-value">{{ result.parties or 'Information not available' }}</div>
+                                </div>
+
+                                <!-- Filing Date -->
+                                <div class="result-item">
+                                    <div class="result-label">
+                                        <div class="result-icon">
+                                            <i class="fas fa-calendar-plus"></i>
+                                        </div>
+                                        Filing Date
+                                    </div>
+                                    <div class="result-value">{{ result.filing_date or 'Date not found' }}</div>
+                                </div>
+
+                                <!-- Next Hearing Date -->
+                                <div class="result-item">
+                                    <div class="result-label">
+                                        <div class="result-icon">
+                                            <i class="fas fa-calendar-check"></i>
+                                        </div>
+                                        Next Hearing Date
+                                    </div>
+                                    <div class="result-value">{{ result.next_hearing or 'No upcoming hearing scheduled' }}</div>
+                                </div>
+                            </div>
+
+                            <!-- PDF Download Section -->
+                            <div class="pdf-section {{ 'no-pdf' if not result.pdf_link }}">
+                                <div class="pdf-icon">
+                                    <i class="fas {{ 'fa-file-pdf' if result.pdf_link else 'fa-file-times' }}"></i>
+                                </div>
+                                
+                                {% if result.pdf_link %}
+                                    <h4 class="mb-3" style="color: var(--success-color); font-weight: 600;">
+                                        Order/Judgment Available
+                                    </h4>
+                                    <p class="mb-4" style="color: var(--text-secondary);">
+                                        Click the button below to download the most recent court document
+                                    </p>
+                                    <a href="{{ result.pdf_link }}" target="_blank" class="btn-download">
+                                        <i class="fas fa-download"></i>
+                                        Download PDF Document
+                                    </a>
+                                {% else %}
+                                    <h4 class="mb-3" style="color: #856404; font-weight: 600;">
+                                        No Document Available
+                                    </h4>
+                                    <p class="mb-0" style="color: var(--text-secondary);">
+                                        No PDF orders or judgments were found for this case at this time
+                                    </p>
+                                {% endif %}
+                            </div>
+
+                        {% else %}
+                            <!-- Error State -->
+                            <div class="error-section">
+                                <div class="error-icon">
+                                    <i class="fas fa-search-minus"></i>
+                                </div>
+                                <h3 class="error-title">Case Not Found</h3>
+                                <div class="error-message">
+                                    {{ error|default('The requested case could not be found. Please verify the case details and try again.') }}
+                                </div>
+                                
+                                <!-- Troubleshooting Tips -->
+                                <div class="mt-4">
+                                    <h5 style="color: var(--text-primary); margin-bottom: 1rem;">
+                                        <i class="fas fa-lightbulb me-2"></i>Troubleshooting Tips:
+                                    </h5>
+                                    <ul class="list-unstyled" style="color: var(--text-secondary); text-align: left; display: inline-block;">
+                                        <li class="mb-2">
+                                            <i class="fas fa-check-circle me-2" style="color: var(--success-color);"></i>
+                                            Verify the case type is correct
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check-circle me-2" style="color: var(--success-color);"></i>
+                                            Double-check the case number format
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check-circle me-2" style="color: var(--success-color);"></i>
+                                            Ensure the filing year is accurate
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check-circle me-2" style="color: var(--success-color);"></i>
+                                            Case might be from a different court
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Back Button -->
+                        <div class="text-center">
+                            <a href="/" class="btn-back">
+                                <i class="fas fa-arrow-left"></i>
+                                Search Another Case
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information Card -->
+                <div class="card result-card mt-4" style="animation-delay: 0.6s;">
+                    <div class="card-body text-center">
+                        <h5 style="color: var(--text-primary); margin-bottom: 1rem;">
+                            <i class="fas fa-info-circle me-2"></i>Important Information
+                        </h5>
+                        <p style="color: var(--text-secondary); margin-bottom: 0;">
+                            This information is retrieved directly from the Delhi High Court's official database. 
+                            For the most up-to-date information, please visit the court's official website or contact the registry directly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth entrance animations
+            const resultItems = document.querySelectorAll('.result-item');
+            resultItems.forEach((item, index) => {
+                item.style.animationDelay = `${0.6 + (index * 0.1)}s`;
+                item.style.animation = 'slideInScale 0.6s ease-out forwards';
+                item.style.opacity = '0';
+            });
+
+            // Add hover effects for result items
+            resultItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Add click animation to download button
+            const downloadBtn = document.querySelector('.btn-download');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function(e) {
+                    // Create ripple effect
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255,255,255,0.3);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: ripple 0.6s ease-out;
+                        pointer-events: none;
+                    `;
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            }
+
+            // Add copy functionality for case details
+            resultItems.forEach(item => {
+                const value = item.querySelector('.result-value');
+                if (value) {
+                    item.addEventListener('click', function() {
+                        const text = value.textContent.trim();
+                        if (text && text !== 'Information not available' && text !== 'Date not found' && text !== 'No upcoming hearing scheduled') {
+                            navigator.clipboard.writeText(text).then(() => {
+                                // Show tooltip
+                                const tooltip = document.createElement('div');
+                                tooltip.textContent = 'Copied to clipboard!';
+                                tooltip.style.cssText = `
+                                    position: absolute;
+                                    top: -40px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background: var(--success-color);
+                                    color: white;
+                                    padding: 0.5rem 1rem;
+                                    border-radius: 6px;
+                                    font-size: 0.8rem;
+                                    white-space: nowrap;
+                                    z-index: 1000;
+                                    opacity: 0;
+                                    animation: fadeInOut 2s forwards;
+                                `;
+                                
+                                item.style.position = 'relative';
+                                item.appendChild(tooltip);
+                                
+                                setTimeout(() => tooltip.remove(), 2000);
+                            });
+                        }
+                    });
+                    
+                    // Add cursor pointer for clickable items
+                    item.style.cursor = 'pointer';
+                    
+                    // Add title attribute for better UX
+                    item.title = 'Click to copy';
+                }
+            });
+        });
+
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+            
+            @keyframes fadeInOut {
+                0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+                20%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+                100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
