@@ -1,1 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delhi High Court Case Search - Legal Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="container">
+            <div class="header-icon">
+                <i class="fas fa-balance-scale"></i>
+            </div>
+            <h1 class="header-title">Delhi High Court</h1>
+            <p class="header-subtitle">Advanced Case Status Search Portal</p>
+        </div>
+    </div>
 
+    <!-- Main Container -->
+    <div class="container main-container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <!-- Search Card -->
+                <div class="card search-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-search me-2"></i>Search Case Details
+                        </h3>
+                        <p class="card-subtitle mb-0">Enter case information to retrieve status and documents</p>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" id="searchForm">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="mb-3">
+                                        <label for="case_type" class="form-label">
+                                            <i class="fas fa-list me-1"></i>Case Type
+                                        </label>
+                                        <select name="case_type" id="case_type" class="form-select py-3 px-3" required>
+                                            <option disabled selected value="">Select Case Type</option>
+                                            {% for type in [
+                                            "ADMIN.REPORT","ARB.A.","ARB. A. (COMM.)","ARB.P.","BAIL APPLN.",
+                                            "CA","CA (COMM.IPD‑CR)","C.A.(COMM.IPD‑GI)","C.A.(COMM.IPD‑PAT)","C.A.(COMM.IPD‑PV)",
+                                            "C.A.(COMM.IPD‑TM)","CAVEAT(CO.)","CC(ARB.)","CCP(CO.)","CCP(REF)","CEAC",
+                                            "CEAR","CHAT.A.C.","CHAT.A.REF","CMI","CM(M)","CM(M)-IPD","C.O.","CO.APP.",
+                                            "CO.APPL.(C)","CO.APPL.(M)","CO.A(SB)","C.O.(COMM.IPD‑CR)","C.O.(COMM.IPD‑GI)",
+                                            "C.O.(COMM.IPD‑PAT)","C.O.(COMM.IPD‑TM)","CO.EX.","CONT.APP.(C)","CONT.CAS(C)",
+                                            "CONT.CAS.(CRL)","CO.PET.","C.REF.(O)","CRL.A.","CRL.L.P.","CRL.M.C.","CRL.M.(CO.)",
+                                            "CRL.M.I.","CRL.O.","CRL.O.(CO.)","CRL.REF.","CRL.REV.P.","CRL.REV.P.(MAT.)",
+                                            "CRL.REV.P.(NDPS)","CRL.REV.P.(NI)","C.R.P.","CRP‑IPD","C.RULE","CS(COMM)","CS(OS)",
+                                            "GP","CUSAA","CUS.A.C.","CUS.A.R.","CUSTOM A.","DEATH SENTENCE REF.","DEMO",
+                                            "EDC","EDR","EFA(COMM)","EFA(OS)","EFA(OS) (COMM)","EFA(OS) (IPD)","EL.PET.","ETR",
+                                            "EX.F.A.","EX.P.","EX.S.A.","FAO","FAO (COMM)","FAO-IPD","FAO(OS)","FAO(OS) (COMM)",
+                                            "FAO(OS)(IPD)","GCAC","GCAR","GTA","GTC","GTR","I.A.","I.P.A.","ITA","ITC","ITR",
+                                            "ITSA","LA.APP.","LPA","MAC.APP.","MAT.","MAT.APP.","MAT.APP.(F.C.)","MAT.CASE",
+                                            "MAT.REF.","MISC. APPEAL(PMLA)","OA","OCJA","O.M.P.","O.M.P. (COMM)","O.M.P. (CONT.)",
+                                            "O.M.P. (E)","O.M.P. (E) (COMM.)","O.M.P.(EFA)(COMM.)","O.M.P. (ENF.) (COMM.)",
+                                            "O.M.P.(I)","O.M.P. (I) (COMM.)","O.M.P. (J) (COMM.)","O.M.P. (MISC.)",
+                                            "O.M.P.(MISC.)(COMM.)","O.M.P.(T)","O.M.P. (T) (COMM.)","O.REF.","RC.REV.","RC.S.A.",
+                                            "RERA APPEAL","REVIEW PET.","RFA","RFA(COMM)","RFA-IPD","RFA(OS)","RFA(OS)(COMM)",
+                                            "RFA(OS)(IPD)","RSA","SCA","SDR","SERTA","ST.APPL.","STC","ST.REF.","SUR.T.REF.",
+                                            "TEST.CAS.","TR.P.(C)","TR.P.(C.)","TR.P.(CRL.)","VAT APPEAL","W.P.(C)",
+                                            "W.P.(C)-IPD","WP(C)(IPD)","W.P.(CRL)","WTA","WTC","WTR"
+                                            ] %}
+                                                <option value="{{ type }}">{{ type }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" name="case_number" id="case_number" class="form-control" placeholder="Case Number" required pattern="[0-9]+">
+                                        <label for="case_number">
+                                            <i class="fas fa-hashtag me-1"></i>Case Number
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" name="filing_year" id="filing_year" class="form-control" placeholder="Filing Year" required pattern="[0-9]{4}" maxlength="4">
+                                        <label for="filing_year">
+                                            <i class="fas fa-calendar-alt me-1"></i>Filing Year (YYYY)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-search">
+                                    <span class="btn-text">
+                                        <i class="fas fa-search me-2"></i>Search Case Status
+                                    </span>
+                                    <span class="btn-loading d-none">
+                                        <span class="spinner-border spinner-border-sm me-2"></span>Searching...
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="features-grid">
+                    <div class="feature-card" style="--delay: 0s">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4 class="feature-title">Secure & Reliable</h4>
+                        <p class="feature-desc">Direct connection to official Delhi High Court database</p>
+                    </div>
+                    
+                    <div class="feature-card" style="--delay: 0.1s">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h4 class="feature-title">Fast Results</h4>
+                        <p class="feature-desc">Get instant case status and document access</p>
+                    </div>
+                    
+                    <div class="feature-card" style="--delay: 0.2s">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-download"></i>
+                        </div>
+                        <h4 class="feature-title">Document Access</h4>
+                        <p class="feature-desc">Download orders and judgments directly</p>
+                    </div>
+                </div>
+
+                <!-- Important Info -->
+                <div class="card info-card mt-4">
+                    <div class="card-body p-0">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-info"></i>
+                            </div>
+                            <div class="info-text">
+                                Ensure the case type matches the official Delhi High Court classification
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="info-text">
+                                Search results may take 10-15 seconds due to CAPTCHA processing
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="info-text">
+                                All searches are logged for audit and performance optimization
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-fill current year
+            const yearInput = document.getElementById('filing_year');
+            const currentYear = new Date().getFullYear();
+            yearInput.value = currentYear;
+
+            // Form submission with loading state
+            const form = document.getElementById('searchForm');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+
+            form.addEventListener('submit', function(e) {
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.classList.add('loading');
+                btnText.classList.add('d-none');
+                btnLoading.classList.remove('d-none');
+
+                // Add subtle animation
+                submitBtn.style.transform = 'scale(0.98)';
+                
+                // Note: Form will actually submit and navigate, so loading state
+                // will be visible until page redirect
+            });
+
+            // Input validation with visual feedback
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.checkValidity()) {
+                        this.classList.add('is-valid');
+                        this.classList.remove('is-invalid');
+                    } else {
+                        this.classList.add('is-invalid');
+                        this.classList.remove('is-valid');
+                    }
+                });
+
+                input.addEventListener('input', function() {
+                    if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                        this.classList.add('is-valid');
+                        this.classList.remove('is-invalid');
+                    }
+                });
+            });
+
+            // Year input validation
+            yearInput.addEventListener('input', function() {
+                const year = parseInt(this.value);
+                const currentYear = new Date().getFullYear();
+                
+                if (this.value.length === 4) {
+                    if (year > currentYear) {
+                        this.setCustomValidity('Year cannot be in the future');
+                    } else if (year < 1950) {
+                        this.setCustomValidity('Year must be 1950 or later');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                } else if (this.value.length > 0) {
+                    this.setCustomValidity('Please enter a 4-digit year');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+
+            // Case number validation
+            const caseNumberInput = document.getElementById('case_number');
+            caseNumberInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            // Smooth animations on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe feature cards
+            document.querySelectorAll('.feature-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
